@@ -11,7 +11,7 @@ def top_departments(db_path):
     JOIN employees e ON d.dept_id = e.dept_id
     GROUP BY d.dept_id, d.name
     ORDER BY total_salary DESC
-    LIMIT 3
+    LIMIT 3;
     """
 
     cursor.execute(query)
@@ -27,8 +27,8 @@ def employees_with_projects(db_path):
     query = """
     SELECT e.name, p.name
     FROM employees e
-    INNER JOIN project_assignments pa ON e.emp_id = pa.emp_id
-    INNER JOIN projects p ON pa.project_id = p.project_id
+    JOIN project_assignments pa ON e.emp_id = pa.emp_id
+    JOIN projects p ON pa.project_id = p.project_id;
     """
 
     cursor.execute(query)
@@ -49,10 +49,10 @@ def salary_rank_by_department(db_path):
         RANK() OVER (
             PARTITION BY e.dept_id
             ORDER BY e.salary DESC
-        ) AS rank
+        ) AS salary_rank
     FROM employees e
     JOIN departments d ON e.dept_id = d.dept_id
-    ORDER BY d.name, rank
+    ORDER BY d.name, salary_rank;
     """
 
     cursor.execute(query)
